@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { vapi } from "@/lib/vapi.sdk";
 import { interviewer } from "@/constants";
 import { createFeedback } from "@/lib/actions/general.action";
+import { VapiClient } from '@vapi-ai/server-sdk';
 
 enum CallStatus {
   INACTIVE = "INACTIVE",
@@ -34,6 +35,7 @@ const Agent = ({
   const [messages, setMessages] = useState<SavedMessage[]>([]);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [lastMessage, setLastMessage] = useState<string>("");
+  // const vapiClient = new VapiClient({ token: 'process.env.NEXT_PUBLIC_VAPI_WEB_TOKEN!', });
 
   useEffect(() => {
     const onCallStart = () => {
@@ -118,7 +120,8 @@ const Agent = ({
     setCallStatus(CallStatus.CONNECTING);
 
     if (type === "generate") {
-      await vapi.start(process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID!, {
+      await vapi.start(undefined, undefined, undefined,
+        process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID!, {
         variableValues: {
           username: userName,
           userid: userId,
